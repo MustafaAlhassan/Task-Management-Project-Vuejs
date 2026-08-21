@@ -6,6 +6,8 @@ import { ref, watch, onMounted } from 'vue';
 
 const tasks = ref([])
 
+const Priorities = ["High", "Medium", "Low"]
+
 watch(
     tasks,
     (newTasks) => {
@@ -32,14 +34,20 @@ function addNewTaskToList(newTask) {
 function deleteTaskFromList(id) {
     tasks.value = tasks.value.filter(task => task.id !== id)
 }
+
+function editTaskInList(updatedTask) {
+    tasks.value = tasks.value.map(task =>
+        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+    )
+}
 </script>
 
 <template>
     <Header />
     <div class="container">
-        <AddNewTask @add-task="addNewTaskToList" />
+        <AddNewTask @add-task="addNewTaskToList" :Priorities="Priorities" />
         <div class="mb-5"></div>
-        <TaskTable :tasks="tasks" @delete-task="deleteTaskFromList" />
+        <TaskTable :tasks="tasks" @delete-task="deleteTaskFromList" @edit-task="editTaskInList" :Priorities="Priorities" />
     </div>
 </template>
 

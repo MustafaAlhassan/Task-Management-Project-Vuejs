@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 
+const props = defineProps(['Priorities'])
 const emit = defineEmits(['add-task'])
-
-const Priorities = ["High", "Medium", "Low"]
 
 const taskName = ref('')
 const taskDueDate = ref('')
