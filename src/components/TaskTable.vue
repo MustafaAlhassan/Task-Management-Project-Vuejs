@@ -3,9 +3,9 @@ import { ref } from 'vue';
 import DeleteTask from './DeleteTask.vue';
 import EditTask from './EditTask.vue';
 
-defineProps(['tasks'])
+defineProps(['tasks', 'Priorities'])
 
-const emit = defineEmits(['delete-task', 'edit-task'])
+const emit = defineEmits(['delete-task', 'edit-task', 'complete-task'])
 
 const isDeleteModalOpen = ref(false)
 const isEditModalOpen = ref(false)
@@ -39,6 +39,10 @@ function onConfirmEdit(updatedTask) {
     emit('edit-task', updatedTask)
     handleClose()
 }
+
+function handleComplete(completedTask) {
+    emit('complete-task', completedTask)
+}
 </script>
 
 <template>
@@ -51,31 +55,44 @@ function onConfirmEdit(updatedTask) {
                     <th>Date Add</th>
                     <th>Deadline</th>
                     <th>Priority</th>
-                    <th>execution</th>
+                    <th>Execution</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in tasks" :key="item.id">
+                <tr v-for="(item, index) in tasks"
+                    :class="{ 'table-secondary text-decoration-line-through text-muted': item.isCompleted }"
+                    :key="item.id">
                     <th>{{ index + 1 }}</th>
                     <td>{{ item.task }}</td>
-                    <td>{{ item.addDate }}</td>
-                    <td>{{ item.dueDate }}</td>
-                    <td>{{ item.priority }}</td>
-                    <td class="d-flex">
-                        <button type="button" @click="openEditModal(item)" class="btn btn-outline-warning me-2">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <button type="button" @click="openDeleteModal(item.id)" class="btn btn-outline-danger">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                    <td class="text-nowrap">{{ item.addDate }}</td>
+                    <td class="text-nowrap">{{ item.dueDate }}</td>
+                    <td><span class="badge rounded-pill" :class="{
+                        'text-bg-danger': item.priority === 'High',
+                        'text-bg-warning': item.priority === 'Medium',
+                        'text-bg-info': item.priority === 'Low'
+                    }">
+                            {{ item.priority }}
+                        </span></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <button type="button" @click="handleComplete(item)" class="btn btn-outline-success me-2">
+                                <i class="bi bi-check2-square"></i>
+                            </button>
+                            <button type="button" @click="openEditModal(item)" class="btn btn-outline-warning me-2"
+                                :class="{ 'text-muted disabled': item.isCompleted }">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button type="button" @click="openDeleteModal(item.id)" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-
         <DeleteTask v-if="isDeleteModalOpen" @close="handleClose" @confirm-delete="onConfirmDelete" />
-
-        <EditTask v-if="isEditModalOpen" :task="selectedTask" @close="handleClose" @confirm-edit="onConfirmEdit" />
+        <EditTask v-if="isEditModalOpen" :task="selectedTask" :Priorities="Priorities" @close="handleClose"
+            @confirm-edit="onConfirmEdit" />
     </div>
 
     <div v-else class="text-center text-muted my-4">

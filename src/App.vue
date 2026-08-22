@@ -40,14 +40,24 @@ function editTaskInList(updatedTask) {
         task.id === updatedTask.id ? { ...task, ...updatedTask } : task
     )
 }
+
+function makeTaskCompleted(completedTask) {
+    tasks.value = tasks.value.map(task => {
+        if (task.id === completedTask.id) {
+            return { ...task, isCompleted: !task.isCompleted }
+        }
+        return task;
+    }
+    )
+}
 </script>
 
 <template>
     <Header />
     <div class="container">
         <AddNewTask @add-task="addNewTaskToList" :Priorities="Priorities" />
-        <div class="mb-5"></div>
-        <TaskTable :tasks="tasks" @delete-task="deleteTaskFromList" @edit-task="editTaskInList" :Priorities="Priorities" />
+        <TaskTable :tasks="tasks" @delete-task="deleteTaskFromList" @edit-task="editTaskInList"
+            @complete-task="makeTaskCompleted" :Priorities="Priorities" />
     </div>
 </template>
 

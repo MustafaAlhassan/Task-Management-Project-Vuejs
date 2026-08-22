@@ -1,24 +1,40 @@
 <script setup>
 import { ref } from 'vue';
 import Dialog from './Dialog.vue';
+import TaskForm from './TaskForm.vue';
 
 const props = defineProps(['task', 'Priorities'])
 
 const emit = defineEmits(['close', 'confirm-edit'])
 
-const Priorities = ["High", "Medium", "Low"]
+const formData = ref({
+    task: props.task?.task || '',
+    dueDate: props.task?.dueDate || '',
+    priority: props.task?.priority || ''
+})
 
-const taskName = ref(props.task?.task || '')
-const taskDueDate = ref(props.task?.dueDate || '')
-const selectedPriority = ref(props.task?.priority || '')
+const errorMessage = ref('')
+
 
 function handleConfirm() {
+    errorMessage.value = ''
+
+    if (!formData.value.task.trim()) {
+        errorMessage.value = 'Task Name Cannot be Empty!'
+        return
+    }
+
+    if (!formData.value.task) {
+        errorMessage.value = 'Please Choose a Priority!'
+        return
+    }
+
     emit('confirm-edit', {
         id: props.task.id,
         addDate: props.task.addDate,
-        task: taskName.value,
-        dueDate: taskDueDate.value,
-        priority: selectedPriority.value
+        task: formData.value.task,
+        dueDate: formData.value.dueDate,
+        priority: formData.value.priority
     })
 }
 </script>
@@ -30,34 +46,12 @@ function handleConfirm() {
             <button type="button" class="btn-close" @click="emit('close')" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="mb-3 row">
-                <label for="TaskName" class="form-label fw-bold">Task Name:</label>
-                <div>
-                    <input v-model="taskName" type="text" class="form-control border border-success" id="TaskName">
-                </div>
+            <TaskForm v-model="formData" />
+            <div v-if="errorMessage" class="alert alert-danger py-2 mb-3">
+                {{ errorMessage }}
             </div>
-            <div class="mb-3 row">
-                <div class="col-6">
-                    <label for="taskDueDate" class="form-label fw-bold">Deadline:</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="bi bi-calendar-event"></i>
-                        </span>
-                        <input v-model="taskDueDate" type="date" id="taskDueDate" class="form-control">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <label for="Priority" class="form-label fw-bold">Priority:</label>
-                    <select v-model="selectedPriority" class="form-select" id="Priority">
-                        <option value="" disabled>Select priority</option>
-                        <option v-for="(value, index) in Priorities" :key="index" :value="value">
-                            {{ value }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="emit('close')">Cancel</button>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="button" class="btn btn-secondary me-2" @click="emit('close')">Cancel</button>
                 <button type="button" class="btn btn-warning" @click="handleConfirm">Save</button>
             </div>
         </div>

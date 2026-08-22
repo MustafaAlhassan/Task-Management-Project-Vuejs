@@ -1,12 +1,15 @@
 <script setup>
 import { ref } from 'vue'
+import TaskForm from './TaskForm.vue'
 
 const props = defineProps(['Priorities'])
 const emit = defineEmits(['add-task'])
 
-const taskName = ref('')
-const taskDueDate = ref('')
-const selectedPriority = ref('')
+const formData = ref({
+    task: '',
+    dueDate: '',
+    priority: ''
+})
 
 const addSuccess = ref(false)
 const errorMessage = ref('')
@@ -14,33 +17,34 @@ const errorMessage = ref('')
 function handleAddTask() {
     errorMessage.value = ''
 
-    if (!taskName.value.trim()) {
+    if (!formData.value.task.trim()) {
         errorMessage.value = 'Please Write a Task!'
         return
     }
 
-    const finalDueDate = taskDueDate.value || 'None'
+    const finalDueDate = formData.value.dueDate || 'None'
 
-    if (!selectedPriority.value) {
+    if (!formData.value.task) {
         errorMessage.value = 'Please Choose a Priority!'
         return
     }
 
     const newTask = {
         id: Date.now(),
-        task: taskName.value,
+        task: formData.value.task,
         addDate: new Date().toLocaleDateString(),
         dueDate: finalDueDate,
-        priority: selectedPriority.value
+        priority: formData.value.priority,
+        isCompleted: false
     }
 
     emit('add-task', newTask)
 
     addSuccess.value = true
 
-    taskName.value = ''
-    taskDueDate.value = ''
-    selectedPriority.value = ''
+    formData.value.task = ''
+    formData.value.dueDate = ''
+    formData.value.priority = ''
 
     setTimeout(() => {
         addSuccess.value = false
@@ -57,36 +61,13 @@ function handleAddTask() {
         Task Added Successfully!
     </div>
 
-    <div class="mb-3 row">
-        <label for="TaskName" class="form-label fw-bold">Task Name:</label>
-        <div>
-            <input v-model="taskName" type="text" class="form-control border border-success" id="TaskName">
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <div class="col">
-            <label for="taskDueDate" class="form-label fw-bold">Deadline:</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                    <i class="bi bi-calendar-event"></i>
-                </span>
-                <input v-model="taskDueDate" type="date" id="taskDueDate" class="form-control">
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="Priority" class="form-label fw-bold">Priority:</label>
-            <select v-model="selectedPriority" class="form-select" id="Priority">
-                <option value="" disabled selected>Open this select menu</option>
-                <option v-for="(value, index) in Priorities" :key="index" :value="value">
-                    {{ value }}
-                </option>
-            </select>
-        </div>
-        <div class="col-2 d-flex justify-content-end align-items-end">
+    <div class="mb-3">
+        <TaskForm v-model="formData"/>
+        <div class="d-flex justify-content-end align-items-end mt-3">
             <button @click="handleAddTask" type="button" class="btn btn-success w-100">Add</button>
         </div>
     </div>
-    <hr class="my-4">
+    <hr class="my-3">
 </template>
 
 <style scoped></style>
