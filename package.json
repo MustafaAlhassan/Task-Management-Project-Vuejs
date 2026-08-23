@@ -12,7 +12,8 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
-    "vue": "^3.5.40"
+    "vue": "^3.5.40",
+    "vue-i18n": "^9.14.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",

@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import TaskForm from './TaskForm.vue'
+
+const { t } = useI18n()
 
 const props = defineProps(['Priorities'])
 const emit = defineEmits(['add-task'])
@@ -18,14 +21,14 @@ function handleAddTask() {
     errorMessage.value = ''
 
     if (!formData.value.task.trim()) {
-        errorMessage.value = 'Please Write a Task!'
+        errorMessage.value = t('writeTaskError')
         return
     }
 
     const finalDueDate = formData.value.dueDate || 'None'
 
-    if (!formData.value.task) {
-        errorMessage.value = 'Please Choose a Priority!'
+    if (!formData.value.priority) {
+        errorMessage.value = t('choosePriorityError')
         return
     }
 
@@ -58,13 +61,15 @@ function handleAddTask() {
     </div>
 
     <div v-if="addSuccess" class="alert alert-success py-2 mb-3">
-        Task Added Successfully!
+        {{ $t('successMessage') }}
     </div>
 
     <div class="mb-3">
-        <TaskForm v-model="formData"/>
+        <TaskForm v-model="formData" />
         <div class="d-flex justify-content-end align-items-end mt-3">
-            <button @click="handleAddTask" type="button" class="btn btn-success w-100">Add</button>
+            <button @click="handleAddTask" type="button" class="btn btn-success w-100">
+                {{ $t('addBtn') }}
+            </button>
         </div>
     </div>
     <hr class="my-3">

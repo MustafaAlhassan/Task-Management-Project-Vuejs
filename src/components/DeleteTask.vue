@@ -10,16 +10,18 @@ function handleConfirm() {
 
 <template>
     <Dialog>
-        <div class="modal-header">
-            <h5 class="modal-title text-danger">Confirm Delete</h5>
-            <button type="button" class="btn-close" @click="emit('close')" aria-label="Close"></button>
-        </div>
         <div class="modal-body">
-            <p>Are you sure you want to delete this task?</p>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="modal-title text-danger m-0">
+                    {{ $t('confirmDelete') }}
+                </h5>
+                <button type="button" class="btn-close" @click="emit('close')" :aria-label="$t('close')"></button>
+            </div>
+            <p>{{ $t('confirmDeleteMessage') }}</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="emit('close')">Cancel</button>
-            <button type="button" class="btn btn-danger" @click="handleConfirm">Delete</button>
+            <button type="button" class="btn btn-secondary" @click="emit('close')">{{ $t('cancel') }}</button>
+            <button type="button" class="btn btn-danger" @click="handleConfirm">{{ $t('delete') }}</button>
         </div>
     </Dialog>
 </template>

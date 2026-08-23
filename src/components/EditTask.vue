@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import Dialog from './Dialog.vue';
+import { useI18n } from 'vue-i18n'
 import TaskForm from './TaskForm.vue';
+
+const { t } = useI18n()
 
 const props = defineProps(['task', 'Priorities'])
 
@@ -20,12 +23,12 @@ function handleConfirm() {
     errorMessage.value = ''
 
     if (!formData.value.task.trim()) {
-        errorMessage.value = 'Task Name Cannot be Empty!'
+        errorMessage.value = t('writeTaskError')
         return
     }
 
     if (!formData.value.task) {
-        errorMessage.value = 'Please Choose a Priority!'
+        errorMessage.value = t('choosePriorityError')
         return
     }
 
@@ -41,19 +44,25 @@ function handleConfirm() {
 
 <template>
     <Dialog>
-        <div class="modal-header">
-            <h5 class="modal-title text-warning">Edit Task</h5>
-            <button type="button" class="btn-close" @click="emit('close')" aria-label="Close"></button>
-        </div>
         <div class="modal-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="modal-title text-warning m-0">
+                    {{ $t('editTask') }}
+                </h5>
+                <button type="button" class="btn-close" @click="emit('close')" :aria-label="$t('close')"></button>
+            </div>
             <TaskForm v-model="formData" />
-            <div v-if="errorMessage" class="alert alert-danger py-2 mb-3">
+            <div v-if="errorMessage" class="alert alert-danger py-2 mt-3 mb-0">
                 {{ errorMessage }}
             </div>
-            <div class="d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-secondary me-2" @click="emit('close')">Cancel</button>
-                <button type="button" class="btn btn-warning" @click="handleConfirm">Save</button>
-            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="emit('close')">
+                {{ $t('cancel') }}
+            </button>
+            <button type="button" class="btn btn-warning" @click="handleConfirm">
+                {{ $t('save') }}
+            </button>
         </div>
     </Dialog>
 </template>

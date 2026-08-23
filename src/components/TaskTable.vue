@@ -2,6 +2,16 @@
 import { ref } from 'vue';
 import DeleteTask from './DeleteTask.vue';
 import EditTask from './EditTask.vue';
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+function getPriorityLabel(priority) {
+    if (priority === 'High') return t('high')
+    if (priority === 'Medium') return t('medium')
+    if (priority === 'Low') return t('low')
+    return priority
+}
 
 defineProps(['tasks', 'Priorities'])
 
@@ -51,11 +61,11 @@ function handleComplete(completedTask) {
             <thead class="table-success">
                 <tr>
                     <th>#</th>
-                    <th class="w-50">Task</th>
-                    <th>Date Add</th>
-                    <th>Deadline</th>
-                    <th>Priority</th>
-                    <th>Execution</th>
+                    <th class="w-50">{{ $t('taskName') }}</th>
+                    <th>{{ $t('dateAdd') }}</th>
+                    <th>{{ $t('deadline') }}</th>
+                    <th>{{ $t('priority') }}</th>
+                    <th>{{ $t('execution') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,14 +81,14 @@ function handleComplete(completedTask) {
                         'text-bg-warning': item.priority === 'Medium',
                         'text-bg-info': item.priority === 'Low'
                     }">
-                            {{ item.priority }}
+                            {{ getPriorityLabel(item.priority) }}
                         </span></td>
                     <td>
-                        <div class="d-flex align-items-center">
-                            <button type="button" @click="handleComplete(item)" class="btn btn-outline-success me-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" @click="handleComplete(item)" class="btn btn-outline-success">
                                 <i class="bi bi-check2-square"></i>
                             </button>
-                            <button type="button" @click="openEditModal(item)" class="btn btn-outline-warning me-2"
+                            <button type="button" @click="openEditModal(item)" class="btn btn-outline-warning"
                                 :class="{ 'text-muted disabled': item.isCompleted }">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
@@ -96,7 +106,7 @@ function handleComplete(completedTask) {
     </div>
 
     <div v-else class="text-center text-muted my-4">
-        No tasks found. Add a new task above!
+        {{ $t('noTasks') }}
     </div>
 </template>
 
