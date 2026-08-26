@@ -4,7 +4,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-// استخدام computed لتحديث الترجمات تلقائياً عند تغيير اللغة
 const Priorities = computed(() => [
     { key: 'High', label: t('high') },
     { key: 'Medium', label: t('medium') },
@@ -12,7 +11,7 @@ const Priorities = computed(() => [
 ])
 
 const taskData = defineModel({
-    default: () => ({ task: '', dueDate: '', priority: '' })
+    default: () => ({ task: '', description: '', dueDate: '', priority: '' })
 })
 </script>
 
@@ -21,6 +20,13 @@ const taskData = defineModel({
         <label for="TaskName" class="form-label fw-bold">{{ $t('taskName') }}:</label>
         <div>
             <input v-model="taskData.task" type="text" class="form-control border border-success" id="TaskName">
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="TaskDiscription" class="form-label fw-bold">{{ $t('taskDescription') }}:</label>
+        <div>
+            <textarea v-model="taskData.description" class="form-control border border-success" id="TaskDiscription"
+                style="height: 100px"></textarea>
         </div>
     </div>
     <div class="row">

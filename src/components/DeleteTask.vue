@@ -17,7 +17,7 @@ function handleConfirm() {
                 </h5>
                 <button type="button" class="btn-close" @click="emit('close')" :aria-label="$t('close')"></button>
             </div>
-            <p>{{ $t('confirmDeleteMessage') }}</p>
+            <p class="mb-0">{{ $t('confirmDeleteMessage') }}</p>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="emit('close')">{{ $t('cancel') }}</button>

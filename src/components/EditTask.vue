@@ -12,6 +12,7 @@ const emit = defineEmits(['close', 'confirm-edit'])
 
 const formData = ref({
     task: props.task?.task || '',
+    description: props.task?.description || '',
     dueDate: props.task?.dueDate || '',
     priority: props.task?.priority || ''
 })
@@ -36,6 +37,7 @@ function handleConfirm() {
         id: props.task.id,
         addDate: props.task.addDate,
         task: formData.value.task,
+        description: formData.value.description,
         dueDate: formData.value.dueDate,
         priority: formData.value.priority
     })

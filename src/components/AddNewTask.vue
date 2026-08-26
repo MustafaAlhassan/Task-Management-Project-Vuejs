@@ -10,6 +10,7 @@ const emit = defineEmits(['add-task'])
 
 const formData = ref({
     task: '',
+    description: '',
     dueDate: '',
     priority: ''
 })
@@ -35,6 +36,7 @@ function handleAddTask() {
     const newTask = {
         id: Date.now(),
         task: formData.value.task,
+        description: formData.value.description || 'None',
         addDate: new Date().toLocaleDateString(),
         dueDate: finalDueDate,
         priority: formData.value.priority,
@@ -46,6 +48,7 @@ function handleAddTask() {
     addSuccess.value = true
 
     formData.value.task = ''
+    formData.value.description = ''
     formData.value.dueDate = ''
     formData.value.priority = ''
 
