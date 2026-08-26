@@ -28,18 +28,13 @@ function handleSortChange() {
     <div class="d-flex flex-wrap align-items-center gap-3">
         <div class="d-flex align-items-center gap-2">
             <label for="PriorityFilter" class="form-label fw-bold m-0 text-nowrap">{{ $t('priority') }}:</label>
-            <select 
-                id="PriorityFilter" 
-                v-model="selectedPriority" 
-                @change="handlePriorityChange" 
-                class="form-select"
-            >
+            <select id="PriorityFilter" v-model="selectedPriority" @change="handlePriorityChange" class="form-select">
                 <option value="">{{ $t('allPriority') }}</option>
-                <option 
-                    v-for="item in Priorities" 
-                    :key="item.key" 
-                    :value="item.key"
-                >
+                <option v-for="item in Priorities" :key="item.key" :value="item.key" :class="{
+                    'text-danger': item.key === 'High',
+                    'text-warning': item.key === 'Medium',
+                    'text-info': item.key === 'Low'
+                }">
                     {{ item.label }}
                 </option>
             </select>
@@ -47,12 +42,7 @@ function handleSortChange() {
 
         <div class="d-flex align-items-center gap-2">
             <label for="DateSort" class="form-label fw-bold m-0 text-nowrap">{{ $t('sortByDate') }}:</label>
-            <select 
-                id="DateSort" 
-                v-model="selectedSortOrder" 
-                @change="handleSortChange" 
-                class="form-select"
-            >
+            <select id="DateSort" v-model="selectedSortOrder" @change="handleSortChange" class="form-select">
                 <option value="asc">{{ $t('oldestFirst') }}</option>
                 <option value="desc">{{ $t('newestFirst') }}</option>
             </select>
